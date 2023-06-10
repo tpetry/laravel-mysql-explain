@@ -1,0 +1,9 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "declare_strict_types": true,
+        "ordered_class_elements": {
+            "sort_algorithm": "alpha"
+        }
+    }
+}
