@@ -10,7 +10,7 @@
 
 MySQL Query optimization with the `EXPLAIN` command is unnecessarily complicated: The output contains a lot of cryptic information that is incomprehensible or entirely misleading.
 
-This Larvel package collects many query metrics that will be sent to [https://explainmysql.com](explainmysql.com) and transformed to be much easier to understand.
+This Larvel package collects many query metrics that will be sent to [explainmysql.com](https://explainmysql.com) and transformed to be much easier to understand.
 
 ## Installation
 
