@@ -1,6 +1,6 @@
 {
     "name": "tpetry/laravel-mysql-explain",
-    "description": "This is my package laravel-mysql-explain",
+    "description": "Get MySQL EXPLAIN plans that are understandable for humans",
     "keywords": [
         "laravel",
         "mysql",
