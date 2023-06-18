@@ -19,7 +19,8 @@
         "php": "^8.0",
         "ext-pdo": "*",
         "guzzlehttp/guzzle": "^6.0|^7.0",
-        "illuminate/contracts": "^6.0|^7.0|^8.0|^9.0|^10.0"
+        "illuminate/contracts": "^6.0|^7.0|^8.0|^9.0|^10.0",
+        "spatie/invade": "^1.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.6",

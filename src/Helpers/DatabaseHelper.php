@@ -72,7 +72,7 @@ class DatabaseHelper
      */
     private function executeQuery(Connection $db, string $sql, array $bindings, callable $fn): mixed
     {
-        $db->reconnectIfMissingConnection();
+        invade($db)->reconnectIfMissingConnection();
         $pdo = $db->getPdo();
 
         $emulatePrepares = $pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES);
