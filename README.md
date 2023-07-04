@@ -34,7 +34,7 @@ Three new methods have been added to the query builder for very easy submission 
 
 
 ```php
-// $url will be e.g. https://explainmysql.com/explain/613cf8a0-d76c-4386-9680-5b6b537c3463
+// $url will be e.g. https://explainmysql.com/e/C0Omak70mLEXfok1a7Oo1n
 $url = Film::where('description', 'like', '%astronaut%')
     ->explainForHumans();
 
@@ -56,7 +56,7 @@ In some cases you are executing raw SQL queries and don't use the query builder.
 ```php
 use Tpetry\MysqlExplain\Facades\MysqlExplain;
 
-// $url will be e.g. https://explainmysql.com/explain/89eef861-e01b-4ab1-8fa4-4f7dd9d33ead
+// $url will be e.g. https://explainmysql.com/e/H1pfKQ7FH3HnH87dS64Wk1
 $url = MysqlExplain::submitQuery(
     DB::connection('mysql'),
     'SELECT * FROM actor WHERE first_name = ?',
