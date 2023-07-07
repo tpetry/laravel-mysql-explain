@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tpetry\MysqlExplain\Helpers;
 
-use DateTimeInterface;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use PDO;
@@ -21,15 +20,13 @@ class DatabaseHelper
     public function buildRawSql(Connection $db, string $sql, array $bindings = []): string
     {
         $escapedBindings = [];
-        foreach ($bindings as $binding) {
+        foreach ($db->prepareBindings($bindings) as $binding) {
             if ($binding === null) {
                 $escapedBindings[] = 'null';
             } elseif (is_int($binding) || is_float($binding)) {
                 $escapedBindings[] = (string) $binding;
             } elseif (is_bool($binding)) {
                 $escapedBindings[] = $binding ? '1' : '0';
-            } elseif ($binding instanceof DateTimeInterface) {
-                $escapedBindings[] = $db->getPdo()->quote($binding->format($db->getQueryGrammar()->getDateFormat()));
             } else {
                 $escapedBindings[] = $db->getPdo()->quote(strval($binding));
             }
