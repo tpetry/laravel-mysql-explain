@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tpetry\MysqlExplain\Helpers;
 
+use DateTimeInterface;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use PDO;
@@ -27,6 +28,8 @@ class DatabaseHelper
                 $escapedBindings[] = (string) $binding;
             } elseif (is_bool($binding)) {
                 $escapedBindings[] = $binding ? '1' : '0';
+            } elseif ($binding instanceof DateTimeInterface) {
+                $escapedBindings[] = $db->getPdo()->quote($binding->format($db->getQueryGrammar()->getDateFormat()));
             } else {
                 $escapedBindings[] = $db->getPdo()->quote(strval($binding));
             }
@@ -82,7 +85,7 @@ class DatabaseHelper
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             $statement = $pdo->prepare($sql);
-            $db->bindValues($statement, $bindings);
+            $db->bindValues($statement, $db->prepareBindings($bindings));
             $statement->execute();
 
             return $fn($statement);
