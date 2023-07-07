@@ -1,11 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$value of function strval expects bool\\|float\\|int\\|resource\\|string\\|null, mixed given\\.$#"
-			count: 1
-			path: src/Helpers/DatabaseHelper.php
-
-		-
 			message: "#^Parameter \\$explainJson of class Tpetry\\\\MysqlExplain\\\\Values\\\\QueryMetrics constructor expects string, float\\|int\\|string\\|null given\\.$#"
 			count: 1
 			path: src/MysqlExplain.php
