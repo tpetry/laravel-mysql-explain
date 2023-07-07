@@ -20,7 +20,7 @@ class DatabaseHelper
     public function buildRawSql(Connection $db, string $sql, array $bindings = []): string
     {
         $escapedBindings = [];
-        foreach ($bindings as $binding) {
+        foreach ($db->prepareBindings($bindings) as $binding) {
             if ($binding === null) {
                 $escapedBindings[] = 'null';
             } elseif (is_int($binding) || is_float($binding)) {
@@ -82,7 +82,7 @@ class DatabaseHelper
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             $statement = $pdo->prepare($sql);
-            $db->bindValues($statement, $bindings);
+            $db->bindValues($statement, $db->prepareBindings($bindings));
             $statement->execute();
 
             return $fn($statement);
