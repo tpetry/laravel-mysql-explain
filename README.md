@@ -87,7 +87,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [href-staticanalysis]: https://github.com/tpetry/laravel-mysql-explain/actions/workflows/static-analysis.yml
 [href-tests]: https://github.com/tpetry/laravel-mysql-explain/actions/workflows/unit-tests.yml
 [href-version]: https://packagist.org/packages/tpetry/laravel-mysql-explain
-[icon-laravel]: https://img.shields.io/badge/Laravel-6.*--10.*-blue
+[icon-laravel]: https://img.shields.io/badge/Laravel-6.*--11.*-blue
 [icon-license]: https://img.shields.io/github/license/tpetry/laravel-mysql-explain?color=blue&label=License
 [icon-codestyle]: https://img.shields.io/github/actions/workflow/status/tpetry/laravel-mysql-explain/code-style.yml?label=Code%20Style
 [icon-php]: https://img.shields.io/packagist/php-v/tpetry/laravel-mysql-explain?color=blue&label=PHP
