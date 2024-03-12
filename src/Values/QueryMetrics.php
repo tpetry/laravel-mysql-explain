@@ -55,8 +55,8 @@ class QueryMetrics
         string $version,
         array $explainTraditional,
         string $explainJson,
-        string $explainTree = null,
-        array $warnings = null,
+        ?string $explainTree = null,
+        ?array $warnings = null,
     ) {
         $this->query = $query;
         $this->version = $version;
