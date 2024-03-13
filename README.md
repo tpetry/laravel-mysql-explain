@@ -10,7 +10,7 @@
 
 MySQL Query optimization with the `EXPLAIN` command is unnecessarily complicated: The output contains a lot of cryptic information that is incomprehensible or entirely misleading.
 
-This Larvel package collects many query metrics that will be sent to [explainmysql.com](https://explainmysql.com) and transformed to be much easier to understand.
+This Larvel package collects many query metrics that will be sent to [mysqlexplain.com](https://mysqlexplain.com) and transformed to be much easier to understand.
 
 ## Installation
 
@@ -34,7 +34,7 @@ Three new methods have been added to the query builder for very easy submission 
 
 
 ```php
-// $url will be e.g. https://explainmysql.com/e/C0Omak70mLEXfok1a7Oo1n
+// $url will be e.g. https://mysqlexplain.com/e/C0Omak70mLEXfok1a7Oo1n
 $url = Film::where('description', 'like', '%astronaut%')
     ->explainForHumans();
 
@@ -56,7 +56,7 @@ In some cases you are executing raw SQL queries and don't use the query builder.
 ```php
 use Tpetry\MysqlExplain\Facades\MysqlExplain;
 
-// $url will be e.g. https://explainmysql.com/e/H1pfKQ7FH3HnH87dS64Wk1
+// $url will be e.g. https://mysqlexplain.com/e/H1pfKQ7FH3HnH87dS64Wk1
 $url = MysqlExplain::submitQuery(
     DB::connection('mysql'),
     'SELECT * FROM actor WHERE first_name = ?',

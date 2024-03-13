@@ -18,7 +18,7 @@ class ApiHelper
     private Client $client;
 
     public function __construct(
-        private ?string $domain = 'https://explainmysql.com',
+        private ?string $domain = 'https://mysqlexplain.com',
         ?Client $client = null,
     ) {
         $this->client = $client ?? new Client();
