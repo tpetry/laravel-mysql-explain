@@ -22,9 +22,7 @@ class EloquentBuilderTest extends TestCase
 
     public function testExplainForHumans(): void
     {
-        $model = new class() extends Model
-        {
-        };
+        $model = new class() extends Model {};
         $builder = $model->newQuery();
 
         MysqlExplain::shouldReceive('submitBuilder')
