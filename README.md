@@ -1,4 +1,4 @@
-# Laravel MySQL Explains For Humans
+# Laravel MySQL Visual Explains
 
 ![License][icon-license]
 ![PHP][icon-php]
