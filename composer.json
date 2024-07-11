@@ -1,6 +1,6 @@
 {
     "name": "tpetry/laravel-mysql-explain",
-    "description": "Get MySQL EXPLAIN plans that are understandable for humans",
+    "description": "Get Visual MySQL EXPLAIN for Laravel.",
     "keywords": [
         "laravel",
         "mysql",

@@ -10,7 +10,7 @@
 
 MySQL Query optimization with the `EXPLAIN` command is unnecessarily complicated: The output contains a lot of cryptic information that is incomprehensible or entirely misleading.
 
-This Larvel package collects many query metrics that will be sent to [mysqlexplain.com](https://mysqlexplain.com) and transformed to be much easier to understand.
+This Laravel package collects many query metrics that will be sent to [mysqlexplain.com](https://mysqlexplain.com) and transformed to be much easier to understand.
 
 ## Installation
 
@@ -26,26 +26,28 @@ composer require tpetry/laravel-mysql-explain
 
 Three new methods have been added to the query builder for very easy submission of query plans: 
 
-| Type                   | Action                                                              |
-|------------------------|---------------------------------------------------------------------|
-| `explainForHumans`     | returns URL to processed EXPLAIN output                             |
-| `dumpExplainForHumans` | dumps URL to processed EXPLAIN output and continue normal execution |
-| `ddExplainForHumans`   | dumps URL to processed EXPLAIN output and stops execution           |
-
+| Type                                      | Action                                                              |
+|-------------------------------------------|---------------------------------------------------------------------|
+| `visualExplain`                           | returns URL to processed EXPLAIN output                             |
+| `dumpVisualExplain`                       | dumps URL to processed EXPLAIN output and continue normal execution |
+| `ddVisualExplain`                         | dumps URL to processed EXPLAIN output and stops execution           |
+| `explainForHumans` ***(deprecated)***     | returns URL to processed EXPLAIN output                             |
+| `dumpExplainForHumans` ***(deprecated)*** | dumps URL to processed EXPLAIN output and continue normal execution |
+| `ddExplainForHumans` ***(deprecated)***   | dumps URL to processed EXPLAIN output and stops execution           |
 
 ```php
 // $url will be e.g. https://mysqlexplain.com/explain/01j2gcrbsjet9r8rav114vgfsy
 $url = Film::where('description', 'like', '%astronaut%')
-    ->explainForHumans();
+    ->visualExplain();
 
 // URL to EXPLAIN will be printed to screen
 $users = Film::where('description', 'like', '%astronaut%')
-    ->dumpExplainForHumans()
+    ->dumpVisualExplain()
     ->get();
 
 // URL to EXPLAIN will be printed to screen & execution is stopped
-$users = Film::where('description', 'like', '%astronaut%')
-    ->ddExplainForHumans();
+Film::where('description', 'like', '%astronaut%')
+    ->ddVisualExplain();
 ```
 
 ### Raw Queries

@@ -22,6 +22,16 @@ class BuilderMixin
         };
     }
 
+    public function ddVisualExplain(): Closure
+    {
+        /** @return never-returns */
+        return function () {
+            /** @var \Illuminate\Contracts\Database\Query\Builder $this */
+            $url = MysqlExplain::submitBuilder($this);
+            dd($url);
+        };
+    }
+
     public function dumpExplainForHumans(): Closure
     {
         return function () {
@@ -33,7 +43,28 @@ class BuilderMixin
         };
     }
 
+    public function dumpVisualExplain(): Closure
+    {
+        return function () {
+            /** @var \Illuminate\Contracts\Database\Query\Builder $this */
+            $url = MysqlExplain::submitBuilder($this);
+            dump($url);
+
+            return $this;
+        };
+    }
+
     public function explainForHumans(): Closure
+    {
+        return function (): string {
+            /** @var \Illuminate\Contracts\Database\Query\Builder $this */
+            $url = MysqlExplain::submitBuilder($this);
+
+            return $url;
+        };
+    }
+
+    public function visualExplain(): Closure
     {
         return function (): string {
             /** @var \Illuminate\Contracts\Database\Query\Builder $this */
