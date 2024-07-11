@@ -26,24 +26,22 @@ class ApiHelperTest extends TestCase
             ),
             history: $history,
         );
-        $apiHelper = new ApiHelper('https://some-random-domain.local', $client);
+        $apiHelper = new ApiHelper('https://api.some-random-domain.local', $client);
 
         $queryMetrics = new QueryMetrics(
             query: '...query...',
             version: '...version...',
-            explainTraditional: ['...explain traditional...'],
             explainJson: '...explain json...',
             explainTree: '...explain tree...',
-            warnings: ['...warnings...'],
         );
         $url = $apiHelper->submitPlan($queryMetrics);
 
         $this->assertEquals('https://dummy-url-W2lDgjGDl1.local/4XvzCcPWKW', $url);
         $this->assertCount(1, $history);
         $this->assertEquals('POST', $history[0]['request']->getMethod());
-        $this->assertEquals('https://some-random-domain.local/api/v1/plans', (string) $history[0]['request']->getUri());
+        $this->assertEquals('https://api.some-random-domain.local/v2/explains', (string) $history[0]['request']->getUri());
         $this->assertEquals(['application/json'], $history[0]['request']->getHeader('Content-Type'));
-        $this->assertEquals('{"query":"...query...","version":"...version...","explain_traditional":["...explain traditional..."],"explain_json":"...explain json...","explain_tree":"...explain tree...","warnings":["...warnings..."]}', $history[0]['request']->getBody());
+        $this->assertEquals('{"query":"...query...","version":"...version...","explain_json":"...explain json...","explain_tree":"...explain tree..."}', $history[0]['request']->getBody());
     }
 
     private function createGuzzleMock(Response $response, array &$history): Client

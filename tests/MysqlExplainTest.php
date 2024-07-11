@@ -50,12 +50,6 @@ class MysqlExplainTest extends TestCase
             $mock->shouldReceive('queryScalar')
                 ->withArgs([$connection, 'EXPLAIN FORMAT=TREE SELECT * FROM customer WHERE last_name = ?', ['SMITH']])
                 ->andReturn('...explain tree...');
-            $mock->shouldReceive('queryAssoc')
-                ->withArgs([$connection, 'EXPLAIN FORMAT=TRADITIONAL SELECT * FROM customer WHERE last_name = ?', ['SMITH']])
-                ->andReturn(['...explain traditional...']);
-            $mock->shouldReceive('queryAssoc')
-                ->withArgs([$connection, 'SHOW WARNINGS'])
-                ->andReturn(['...warnings...']);
         });
         $this->mock(ApiHelper::class, function (MockInterface $mock): void {
             $mock->shouldReceive('submitPlan')
@@ -66,16 +60,10 @@ class MysqlExplainTest extends TestCase
                     if ($arg->getVersion() !== '...version...') {
                         return false;
                     }
-                    if ($arg->getExplainTraditional() !== ['...explain traditional...']) {
-                        return false;
-                    }
                     if ($arg->getExplainJson() !== '...explain json...') {
                         return false;
                     }
                     if ($arg->getExplainTree() !== '...explain tree...') {
-                        return false;
-                    }
-                    if ($arg->getWarnings() !== ['...warnings...']) {
                         return false;
                     }
 

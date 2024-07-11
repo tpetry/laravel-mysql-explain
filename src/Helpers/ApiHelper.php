@@ -18,7 +18,7 @@ class ApiHelper
     private Client $client;
 
     public function __construct(
-        private ?string $domain = 'https://mysqlexplain.com',
+        private ?string $domain = 'https://api.mysqlexplain.com',
         ?Client $client = null,
     ) {
         $this->client = $client ?? new Client();
@@ -29,7 +29,7 @@ class ApiHelper
         $version = MysqlExplain::$VERSION;
 
         try {
-            $response = $this->client->post('/api/v1/plans', [
+            $response = $this->client->post('/v2/explains', [
                 'base_uri' => $this->domain,
                 'headers' => [
                     'User-Agent' => "tpetry/laravel-mysql-explain@{$version}",
@@ -37,10 +37,8 @@ class ApiHelper
                 'json' => [
                     'query' => $metrics->getQuery(),
                     'version' => $metrics->getVersion(),
-                    'explain_traditional' => $metrics->getExplainTraditional(),
                     'explain_json' => $metrics->getExplainJson(),
                     'explain_tree' => $metrics->getExplainTree(),
-                    'warnings' => $metrics->getWarnings(),
                 ],
             ]);
 

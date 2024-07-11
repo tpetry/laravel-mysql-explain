@@ -63,18 +63,14 @@ class MysqlExplain
 
         $query = $db->buildRawSql($connection, $sql, $bindings);
         $version = $db->queryScalar($connection, 'SELECT VERSION()');
-        $explainTraditional = $db->queryAssoc($connection, "EXPLAIN FORMAT=TRADITIONAL {$sql}", $bindings);
-        $warnings = $db->queryAssoc($connection, 'SHOW WARNINGS');
         $explainJson = $db->queryScalar($connection, "EXPLAIN FORMAT=JSON {$sql}", $bindings);
         $explainTree = rescue(fn () => $db->queryScalar($connection, "EXPLAIN FORMAT=TREE {$sql}", $bindings), null, false);
 
         return new QueryMetrics(
             query: $query,
             version: $version,
-            explainTraditional: $explainTraditional,
             explainJson: $explainJson,
             explainTree: $explainTree,
-            warnings: $warnings,
         );
     }
 }

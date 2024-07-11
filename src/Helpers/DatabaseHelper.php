@@ -42,15 +42,6 @@ class DatabaseHelper
 
     /**
      * @param  mixed[]  $bindings
-     * @return array<int, array<string, int|float|string|null>>
-     */
-    public function queryAssoc(Connection $db, string $sql, array $bindings = []): array
-    {
-        return $this->executeQuery($db, $sql, $bindings, fn (PDOStatement $statement) => $statement->fetchAll(PDO::FETCH_ASSOC));
-    }
-
-    /**
-     * @param  mixed[]  $bindings
      * @return int|float|string|null
      */
     public function queryScalar(Connection $db, string $sql, array $bindings = []): mixed

@@ -14,13 +14,3 @@ parameters:
 			message: "#^Parameter \\$version of class Tpetry\\\\MysqlExplain\\\\Values\\\\QueryMetrics constructor expects string, float\\|int\\|string\\|null given\\.$#"
 			count: 1
 			path: src/MysqlExplain.php
-
-		-
-			message: "#^Property Tpetry\\\\MysqlExplain\\\\Values\\\\QueryMetrics\\:\\:\\$explainTraditional type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Values/QueryMetrics.php
-
-		-
-			message: "#^Property Tpetry\\\\MysqlExplain\\\\Values\\\\QueryMetrics\\:\\:\\$warnings type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Values/QueryMetrics.php
