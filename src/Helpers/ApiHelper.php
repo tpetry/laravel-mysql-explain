@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Tpetry\MysqlExplain\Helpers;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\BadResponseException;
+use Throwable;
 use Tpetry\MysqlExplain\MysqlExplain;
 use Tpetry\MysqlExplain\MySqlExplainException;
 use Tpetry\MysqlExplain\Values\QueryMetrics;
@@ -46,8 +47,10 @@ class ApiHelper
             $json = json_decode($response->getBody()->getContents(), true);
 
             return $json['url'];
-        } catch (GuzzleException $e) {
-            throw MySqlExplainException::fromException($e);
+        } catch (BadResponseException $e) {
+            throw MySqlExplainException::fromBadResponseException($e);
+        } catch (Throwable $t) {
+            throw MySqlExplainException::fromThrowable($t);
         }
     }
 }
