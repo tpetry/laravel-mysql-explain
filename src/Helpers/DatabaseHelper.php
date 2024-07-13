@@ -6,8 +6,6 @@ namespace Tpetry\MysqlExplain\Helpers;
 
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
-use PDO;
-use PDOStatement;
 
 /**
  * @internal
@@ -42,44 +40,15 @@ class DatabaseHelper
 
     /**
      * @param  mixed[]  $bindings
-     * @return int|float|string|null
      */
-    public function queryScalar(Connection $db, string $sql, array $bindings = []): mixed
+    public function queryScalar(Connection $db, string $sql, array $bindings = []): string
     {
-        return $this->executeQuery($db, $sql, $bindings, function (PDOStatement $statement): mixed {
-            /** @var int|float|string|null $value */
-            $value = $statement->fetchColumn();
-
-            return $value;
-        });
-    }
-
-    /**
-     * @template T
-     *
-     * @param  mixed[]  $bindings
-     * @param  (callable(\PDOStatement): T)  $fn
-     * @return T
-     */
-    private function executeQuery(Connection $db, string $sql, array $bindings, callable $fn): mixed
-    {
-        invade($db)->reconnectIfMissingConnection();
-        $pdo = $db->getPdo();
-
-        $emulatePrepares = $pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES);
-        $errorMode = $pdo->getAttribute(PDO::ATTR_ERRMODE);
-        try {
-            $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            $statement = $pdo->prepare($sql);
-            $db->bindValues($statement, $db->prepareBindings($bindings));
-            $statement->execute();
-
-            return $fn($statement);
-        } finally {
-            $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $emulatePrepares);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, $errorMode);
+        if (method_exists($db, 'scalar')) {
+            return (string) $db->scalar($sql, $bindings);
         }
+
+        $record = (array) $db->selectOne($sql, $bindings);
+
+        return (string) reset($record);
     }
 }
