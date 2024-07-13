@@ -17,6 +17,11 @@ class DatabaseHelper
      */
     public function buildRawSql(Connection $db, string $sql, array $bindings = []): string
     {
+        $grammar = $db->getQueryGrammar();
+        if (method_exists($grammar, 'substituteBindingsIntoRawSql')) {
+            return $grammar->substituteBindingsIntoRawSql($sql, $bindings);
+        }
+
         $escapedBindings = [];
         foreach ($db->prepareBindings($bindings) as $binding) {
             if ($binding === null) {
