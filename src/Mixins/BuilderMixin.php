@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tpetry\MysqlExplain\Mixins;
 
 use Closure;
+use Illuminate\Support\Facades\Log;
 use Tpetry\MysqlExplain\Facades\MysqlExplain;
 
 /**
@@ -49,6 +50,17 @@ class BuilderMixin
             /** @var \Illuminate\Contracts\Database\Query\Builder $this */
             $url = MysqlExplain::submitBuilder($this);
             dump($url);
+
+            return $this;
+        };
+    }
+
+    public function logVisualExplain(): Closure
+    {
+        return function () {
+            /** @var \Illuminate\Contracts\Database\Query\Builder $this */
+            $url = MysqlExplain::submitBuilder($this);
+            Log::info($url);
 
             return $this;
         };

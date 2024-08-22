@@ -31,6 +31,7 @@ Three new methods have been added to the query builder for very easy submission 
 | `visualExplain`                           | returns URL to processed EXPLAIN output                             |
 | `dumpVisualExplain`                       | dumps URL to processed EXPLAIN output and continue normal execution |
 | `ddVisualExplain`                         | dumps URL to processed EXPLAIN output and stops execution           |
+| `logVisualExplain`                        | logs URL to processed EXPLAIN output and continue normal execution  |
 | `explainForHumans` ***(deprecated)***     | returns URL to processed EXPLAIN output                             |
 | `dumpExplainForHumans` ***(deprecated)*** | dumps URL to processed EXPLAIN output and continue normal execution |
 | `ddExplainForHumans` ***(deprecated)***   | dumps URL to processed EXPLAIN output and stops execution           |

@@ -30,6 +30,11 @@ class QueryBuilderTest extends TestCase
         $this->markTestSkipped('how to test dump()?');
     }
 
+    public function testLogVisualExplain(): void
+    {
+        $this->markTestSkipped('how to test log()?');
+    }
+
     public function testExplainForHumans(): void
     {
         $builder = DB::table('test123');
