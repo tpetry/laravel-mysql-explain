@@ -45,7 +45,7 @@ class MysqlExplainTest extends TestCase
                 ->andReturn('mysql');
             $mock->shouldReceive('queryScalar')
                 ->withArgs([$connection, 'SELECT * FROM seq_1_to_1'])
-                ->andThrow(new QueryException("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'seq_1_to_1' doesn't exist.", 'SELECT * FROM seq_1_to_1', [], new RuntimeException()));
+                ->andThrow(new QueryException("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'seq_1_to_1' doesn't exist.", 'SELECT * FROM seq_1_to_1', [], new RuntimeException));
             $mock->shouldReceive('queryScalar')
                 ->withArgs([$connection, 'SELECT VERSION()'])
                 ->andReturn('...version...');
