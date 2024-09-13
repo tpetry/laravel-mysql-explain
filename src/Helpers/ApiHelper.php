@@ -22,7 +22,7 @@ class ApiHelper
         private ?string $domain = 'https://api.mysqlexplain.com',
         ?Client $client = null,
     ) {
-        $this->client = $client ?? new Client();
+        $this->client = $client ?? new Client;
     }
 
     public function submitPlan(QueryMetrics $metrics): string

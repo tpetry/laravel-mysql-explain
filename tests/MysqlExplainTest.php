@@ -72,7 +72,7 @@ class MysqlExplainTest extends TestCase
                 ->andReturn('https://dummy-url-i5e6Kp3vJm.local/wowOFpsM2O');
         });
 
-        $url = (new MysqlExplain())->submitQuery($connection, 'SELECT * FROM customer WHERE last_name = ?', ['SMITH']);
+        $url = (new MysqlExplain)->submitQuery($connection, 'SELECT * FROM customer WHERE last_name = ?', ['SMITH']);
 
         $this->assertEquals('https://dummy-url-i5e6Kp3vJm.local/wowOFpsM2O', $url);
     }
@@ -82,7 +82,7 @@ class MysqlExplainTest extends TestCase
         $this->expectException(NotMysqlException::class);
         $this->expectExceptionMessage('Only queries on mysql databases can be analyzed. pgsql query given.');
 
-        (new MysqlExplain())->submitQuery(DB::connection('pgsql'), 'SELECT * FROM actor');
+        (new MysqlExplain)->submitQuery(DB::connection('pgsql'), 'SELECT * FROM actor');
     }
 
     public function testSubmitQueryForbidsNonPdoConnections(): void
@@ -92,6 +92,6 @@ class MysqlExplainTest extends TestCase
         $this->expectException(NotMysqlException::class);
         $this->expectExceptionMessage('Only queries on mysql databases can be analyzed. unknown query given.');
 
-        (new MysqlExplain())->submitQuery($connection, 'SELECT * FROM film');
+        (new MysqlExplain)->submitQuery($connection, 'SELECT * FROM film');
     }
 }

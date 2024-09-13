@@ -16,7 +16,7 @@ class MysqlExplainServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        EloquentBuilder::mixin(new BuilderMixin());
-        QueryBuilder::mixin(new BuilderMixin());
+        EloquentBuilder::mixin(new BuilderMixin);
+        QueryBuilder::mixin(new BuilderMixin);
     }
 }
