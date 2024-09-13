@@ -6,6 +6,7 @@ namespace Tpetry\MysqlExplain\Tests;
 
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Mockery\MockInterface;
 use RuntimeException;
@@ -45,7 +46,10 @@ class MysqlExplainTest extends TestCase
                 ->andReturn('mysql');
             $mock->shouldReceive('queryScalar')
                 ->withArgs([$connection, 'SELECT * FROM seq_1_to_1'])
-                ->andThrow(new QueryException("SQLSTATE[42S02]: Base table or view not found: 1146 Table 'seq_1_to_1' doesn't exist.", 'SELECT * FROM seq_1_to_1', [], new RuntimeException));
+                ->andThrow(match (true) {
+                    version_compare(App::version(), '10.0.0', '>=') => new QueryException('mysql', 'SELECT * FROM seq_1_to_1', [], new RuntimeException),
+                    default => new QueryException('SELECT * FROM seq_1_to_1', [], new RuntimeException)
+                });
             $mock->shouldReceive('queryScalar')
                 ->withArgs([$connection, 'SELECT VERSION()'])
                 ->andReturn('...version...');
