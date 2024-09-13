@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2] - 2024-09-13
+### Changed
+* Improved the detection for MariaDB databases
+
 ## [1.3.1] - 2024-07-13
 ### Changed
 * Removed obsolete logic  for old explain api so the spatie/invade dependency can be removed (#7)
