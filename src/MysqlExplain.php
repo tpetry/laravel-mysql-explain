@@ -6,6 +6,7 @@ namespace Tpetry\MysqlExplain;
 
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Tpetry\MysqlExplain\Exceptions\NotMysqlException;
 use Tpetry\MysqlExplain\Helpers\ApiHelper;
@@ -58,6 +59,17 @@ class MysqlExplain
         $db = app()->make(DatabaseHelper::class);
         if ($db->driverName($connection) !== 'mysql') {
             throw NotMysqlException::create($db->driverName($connection));
+        }
+
+        // Laravel 11 added a new MariaDB database driver but older Laravel versions handle MySQL and MariaDB with the
+        // same driver. This query uses a feature implemented in MariaDB 10.10 (the first one with a different EXPLAIN
+        // output) to detect MariaDB which is unsupported.
+        try {
+            $db->queryScalar($connection, 'SELECT * FROM seq_1_to_1');
+            throw NotMysqlException::create('mariadb');
+        } catch (QueryException) {
+            // This exception is expected when using MySQL as sequence tables are not available. So the exception gets
+            // silenced as the check for MySQL has succeeded.
         }
 
         $query = $db->buildRawSql($connection, $sql, $bindings);
