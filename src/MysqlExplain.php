@@ -53,9 +53,8 @@ class MysqlExplain
             throw NotMysqlException::create(null);
         }
 
-        // Queries are not executed with the standard Laravel database functions because of:
-        // 1. Specific PDO settings are required (prepared statements interfere with SHOW WARNINGS)
-        // 2. Those metric queries should not trigger a Laravel QueryExecuted event
+        // Queries are not executed with the standard Laravel database functions because those metric queries should not
+        // trigger a Laravel QueryExecuted event
         $db = app()->make(DatabaseHelper::class);
         if ($db->driverName($connection) !== 'mysql') {
             throw NotMysqlException::create($db->driverName($connection));
