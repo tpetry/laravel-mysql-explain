@@ -18,8 +18,9 @@
     "require": {
         "php": "^8.0",
         "ext-pdo": "*",
-        "guzzlehttp/guzzle": "^6.0|^7.0",
-        "illuminate/contracts": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0"
+        "guzzlehttp/guzzle": "^7.0",
+        "illuminate/contracts": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+        "tpetry/php-mysql-explain": "^1.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.6",
@@ -32,12 +33,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Tpetry\\MysqlExplain\\": "src/"
+            "Tpetry\\LaravelMysqlExplain\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tpetry\\MysqlExplain\\Tests\\": "tests/"
+            "Tpetry\\LaravelMysqlExplain\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -56,10 +57,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Tpetry\\MysqlExplain\\MysqlExplainServiceProvider"
+                "Tpetry\\LaravelMysqlExplain\\MysqlExplainServiceProvider"
             ],
             "aliases": {
-                "MysqlExplain": "Tpetry\\MysqlExplain\\Facades\\MysqlExplain"
+                "MysqlExplain": "Tpetry\\LaravelMysqlExplain\\Facades\\MysqlExplain"
             }
         }
     },

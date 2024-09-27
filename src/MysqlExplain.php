@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tpetry\MysqlExplain;
+namespace Tpetry\LaravelMysqlExplain;
 
+use Illuminate\Container\Container;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\DB;
-use Tpetry\MysqlExplain\Exceptions\NotMysqlException;
-use Tpetry\MysqlExplain\Helpers\ApiHelper;
-use Tpetry\MysqlExplain\Helpers\DatabaseHelper;
-use Tpetry\MysqlExplain\Values\QueryMetrics;
+use Tpetry\PhpMysqlExplain\Api\Client;
+use Tpetry\PhpMysqlExplain\Metrics\Collector;
 
 class MysqlExplain
 {
@@ -34,19 +32,6 @@ class MysqlExplain
      */
     public function submitQuery(ConnectionInterface $connection, string $sql, array $bindings = []): string
     {
-        $apiHelper = app()->make(ApiHelper::class);
-
-        $metrics = $this->collectQueryMetrics($connection, $sql, $bindings);
-        $url = $apiHelper->submitPlan($metrics);
-
-        return $url;
-    }
-
-    /**
-     * @param  mixed[]  $bindings
-     */
-    private function collectQueryMetrics(ConnectionInterface $connection, string $sql, array $bindings = []): QueryMetrics
-    {
         // In reality all connection interfaces should be classes of Connection. But as DB::connection() returns
         // a connection interface this method also should accept one to not generate PHPStan errors for users of the
         // library.
@@ -56,32 +41,26 @@ class MysqlExplain
 
         // Queries are not executed with the standard Laravel database functions because those metric queries should not
         // trigger a Laravel QueryExecuted event
-        $db = app()->make(DatabaseHelper::class);
-        if ($db->driverName($connection) !== 'mysql') {
-            throw NotMysqlException::create($db->driverName($connection));
+        if ($connection->getDriverName() !== 'mysql') {
+            throw NotMysqlException::create($connection->getDriverName());
         }
 
         // Laravel 11 added a new MariaDB database driver but older Laravel versions handle MySQL and MariaDB with the
         // same driver. This query uses a feature implemented in MariaDB 10.10 (the first one with a different EXPLAIN
         // output) to detect MariaDB which is unsupported.
         try {
-            $db->queryScalar($connection, 'SELECT * FROM seq_1_to_1');
+            $connection->select('SELECT * FROM seq_1_to_1');
             throw NotMysqlException::create('mariadb');
         } catch (QueryException) {
             // This exception is expected when using MySQL as sequence tables are not available. So the exception gets
             // silenced as the check for MySQL has succeeded.
         }
 
-        $query = $db->buildRawSql($connection, $sql, $bindings);
-        $version = $db->queryScalar($connection, 'SELECT VERSION()');
-        $explainJson = $db->queryScalar($connection, "EXPLAIN FORMAT=JSON {$sql}", $bindings);
-        $explainTree = rescue(fn () => $db->queryScalar($connection, "EXPLAIN FORMAT=TREE {$sql}", $bindings), null, false);
+        $container = Container::getInstance();
+        $query = $container->make(LaravelQuery::class, ['connection' => $connection, 'sql' => $sql, 'parameters' => $bindings]);
+        $metrics = $container->make(Collector::class)->execute($query);
+        $result = $container->make(Client::class)->submit($metrics);
 
-        return new QueryMetrics(
-            query: $query,
-            version: $version,
-            explainJson: $explainJson,
-            explainTree: $explainTree,
-        );
+        return $result->getUrl();
     }
 }

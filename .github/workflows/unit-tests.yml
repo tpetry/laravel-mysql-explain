@@ -5,6 +5,16 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      database:
+        image: container-registry.oracle.com/mysql/community-server:8.0
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        env:
+          MYSQL_DATABASE: testing
+          MYSQL_USER: testing
+          MYSQL_PASSWORD: testing
+        ports:
+          - 3306:3306
     strategy:
       fail-fast: false
       matrix:
@@ -68,3 +78,7 @@ jobs:
 
       - name: Execute tests
         run: vendor/bin/phpunit
+        env:
+          DB_DATABASE: testing
+          DB_USERNAME: testing
+          DB_PASSWORD: testing

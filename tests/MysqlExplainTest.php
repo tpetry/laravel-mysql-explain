@@ -2,105 +2,110 @@
 
 declare(strict_types=1);
 
-namespace Tpetry\MysqlExplain\Tests;
+namespace Tpetry\LaravelMysqlExplain\Tests;
 
+use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Mockery;
 use Mockery\MockInterface;
-use RuntimeException;
-use Tpetry\MysqlExplain\Exceptions\NotMysqlException;
-use Tpetry\MysqlExplain\Helpers\ApiHelper;
-use Tpetry\MysqlExplain\Helpers\DatabaseHelper;
-use Tpetry\MysqlExplain\MysqlExplain;
-use Tpetry\MysqlExplain\Values\QueryMetrics;
+use Tpetry\LaravelMysqlExplain\LaravelQuery;
+use Tpetry\LaravelMysqlExplain\MysqlExplain;
+use Tpetry\LaravelMysqlExplain\NotMysqlException;
+use Tpetry\PhpMysqlExplain\Api\Client;
+use Tpetry\PhpMysqlExplain\Api\Result;
+use Tpetry\PhpMysqlExplain\Metrics\Collector;
+use Tpetry\PhpMysqlExplain\Metrics\Metrics;
 
 class MysqlExplainTest extends TestCase
 {
     public function testSubmitBuilderForwardsCall(): void
     {
         $builder = DB::connection()->table('test')->where('col', 1);
-        $mysqlExplain = $this->partialMock(MysqlExplain::class, function (MockInterface $mock): void {
-            $mock->shouldReceive('submitBuilder')
-                // TODO: argument expectations never worked
-                //->withArgs([$builder->getConnection(), $builder->toSql(), $builder->getBindings()])
-                ->andReturn('https://dummy-url-LTGq4mDWlo.local/PTzphBiWQW')
-                ->once();
-        });
+        $mysqlExplain = Mockery::mock(MysqlExplain::class.'[submitQuery]')
+            ->shouldReceive('submitQuery')
+            ->once()
+            ->withArgs([$builder->getConnection(), $builder->toSql(), $builder->getBindings()])
+            ->andReturn('https://dummy-url-LTGq4mDWlo.local/PTzphBiWQW')
+            ->getMock();
 
         $url = $mysqlExplain->submitBuilder($builder);
 
         $this->assertEquals('https://dummy-url-LTGq4mDWlo.local/PTzphBiWQW', $url);
     }
 
-    public function testSubmitQueryCollectsMetricsAndSubmitsThem(): void
-    {
-        $connection = DB::connection('mysql');
-        $this->mock(DatabaseHelper::class, function (MockInterface $mock) use ($connection): void {
-            $mock->shouldReceive('buildRawSql')
-                ->withArgs([$connection, 'SELECT * FROM customer WHERE last_name = ?', ['SMITH']])
-                ->andReturn('...sql...');
-            $mock->shouldReceive('driverName')
-                ->with($connection)
-                ->andReturn('mysql');
-            $mock->shouldReceive('queryScalar')
-                ->withArgs([$connection, 'SELECT * FROM seq_1_to_1'])
-                ->andThrow(match (true) {
-                    version_compare(App::version(), '10.0.0', '>=') => new QueryException('mysql', 'SELECT * FROM seq_1_to_1', [], new RuntimeException),
-                    default => new QueryException('SELECT * FROM seq_1_to_1', [], new RuntimeException)
-                });
-            $mock->shouldReceive('queryScalar')
-                ->withArgs([$connection, 'SELECT VERSION()'])
-                ->andReturn('...version...');
-            $mock->shouldReceive('queryScalar')
-                ->withArgs([$connection, 'EXPLAIN FORMAT=JSON SELECT * FROM customer WHERE last_name = ?', ['SMITH']])
-                ->andReturn('...explain json...');
-            $mock->shouldReceive('queryScalar')
-                ->withArgs([$connection, 'EXPLAIN FORMAT=TREE SELECT * FROM customer WHERE last_name = ?', ['SMITH']])
-                ->andReturn('...explain tree...');
-        });
-        $this->mock(ApiHelper::class, function (MockInterface $mock): void {
-            $mock->shouldReceive('submitPlan')
-                ->withArgs(function (QueryMetrics $arg): bool {
-                    if ($arg->getQuery() !== '...sql...') {
-                        return false;
-                    }
-                    if ($arg->getVersion() !== '...version...') {
-                        return false;
-                    }
-                    if ($arg->getExplainJson() !== '...explain json...') {
-                        return false;
-                    }
-                    if ($arg->getExplainTree() !== '...explain tree...') {
-                        return false;
-                    }
-
-                    return true;
-                })
-                ->andReturn('https://dummy-url-i5e6Kp3vJm.local/wowOFpsM2O');
-        });
-
-        $url = (new MysqlExplain)->submitQuery($connection, 'SELECT * FROM customer WHERE last_name = ?', ['SMITH']);
-
-        $this->assertEquals('https://dummy-url-i5e6Kp3vJm.local/wowOFpsM2O', $url);
-    }
-
-    public function testSubmitQueryForbidsNonMysqlDatabases(): void
+    public function testSubmitQueryFailsWhenMariadbFeatureIsDetected(): void
     {
         $this->expectException(NotMysqlException::class);
-        $this->expectExceptionMessage('Only queries on mysql databases can be analyzed. pgsql query given.');
+        $this->expectExceptionMessage('Only queries on mysql databases can be analyzed. mariadb query given.');
 
-        (new MysqlExplain)->submitQuery(DB::connection('pgsql'), 'SELECT * FROM actor');
+        $connection = Mockery::mock(Connection::class)
+            ->shouldReceive('getDriverName')
+            ->andReturn('mysql')
+            ->shouldReceive('select')
+            ->withArgs(['SELECT * FROM seq_1_to_1'])
+            ->getMock();
+
+        (new MysqlExplain)->submitQuery($connection, 'SELECT 1');
     }
 
-    public function testSubmitQueryForbidsNonPdoConnections(): void
+    public function testSubmitQueryFailsWhenPassedNonMysqlConnection(): void
     {
-        $connection = $this->mock(ConnectionInterface::class);
+        $this->expectException(NotMysqlException::class);
+        $this->expectExceptionMessage('Only queries on mysql databases can be analyzed. mariadb query given.');
 
+        $connection = Mockery::mock(Connection::class)
+            ->shouldReceive('getDriverName')
+            ->andReturn('mariadb')
+            ->getMock();
+
+        (new MysqlExplain)->submitQuery($connection, 'SELECT 1');
+    }
+
+    public function testSubmitQueryFailsWhenPassedNonPdoConnection(): void
+    {
         $this->expectException(NotMysqlException::class);
         $this->expectExceptionMessage('Only queries on mysql databases can be analyzed. unknown query given.');
 
-        (new MysqlExplain)->submitQuery($connection, 'SELECT * FROM film');
+        (new MysqlExplain)->submitQuery(Mockery::mock(ConnectionInterface::class), 'SELECT 1');
+    }
+
+    public function testSubmitQueryReturnsUrl(): void
+    {
+        $connection = DB::connection('mysql');
+        $sql = 'SELECT * FROM customer WHERE last_name = ?';
+        $parameters = ['SMITH'];
+
+        $query = new LaravelQuery($connection, $sql, $parameters);
+        $metrics = new Metrics(
+            query: $query,
+            version: '9.0',
+            explainJson: '{ "query_block": { "select_id": 1, "message": "Impossible WHERE" } }',
+            explainTree: '-> Zero rows (Impossible WHERE)  (cost=0..0 rows=0)',
+        );
+
+        $this->app->bind(LaravelQuery::class, function ($_app, $params) use ($connection, $sql, $parameters, $query) {
+            $this->assertEquals($connection, $params['connection']);
+            $this->assertEquals($sql, $params['sql']);
+            $this->assertEquals($parameters, $params['parameters']);
+
+            return $query;
+        });
+        $this->mock(Collector::class, function (MockInterface $mock) use ($query, $metrics) {
+            $mock->shouldReceive('execute')
+                ->once()
+                ->withArgs([$query])
+                ->andReturn($metrics);
+        });
+        $this->mock(Client::class, function (MockInterface $mock) use ($metrics) {
+            $mock->shouldReceive('submit')
+                ->once()
+                ->withArgs([$metrics])
+                ->andReturn(new Result('https://dummy-url-i5e6Kp3vJm.local/wowOFpsM2O'));
+        });
+
+        $url = (new MysqlExplain)->submitQuery($connection, $sql, $parameters);
+
+        $this->assertEquals('https://dummy-url-i5e6Kp3vJm.local/wowOFpsM2O', $url);
     }
 }

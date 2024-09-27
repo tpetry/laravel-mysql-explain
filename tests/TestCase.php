@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tpetry\MysqlExplain\Tests;
+namespace Tpetry\LaravelMysqlExplain\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
-use Tpetry\MysqlExplain\MysqlExplainServiceProvider;
+use Tpetry\LaravelMysqlExplain\MysqlExplainServiceProvider;
 
 class TestCase extends Orchestra
 {

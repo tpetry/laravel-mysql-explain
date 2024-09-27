@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tpetry\MysqlExplain\Tests\Mixins;
+namespace Tpetry\LaravelMysqlExplain\Tests\Mixins;
 
 use Illuminate\Support\Facades\DB;
-use Tpetry\MysqlExplain\Facades\MysqlExplain;
-use Tpetry\MysqlExplain\Tests\TestCase;
+use Tpetry\LaravelMysqlExplain\Facades\MysqlExplain;
+use Tpetry\LaravelMysqlExplain\Tests\TestCase;
 
 class QueryBuilderTest extends TestCase
 {

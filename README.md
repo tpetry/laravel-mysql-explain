@@ -55,7 +55,7 @@ Film::where('description', 'like', '%astronaut%')
 In some cases you are executing raw SQL queries and don't use the query builder. You can use the `MysqlExplain` facade to get the EXPLAIN url for them:
 
 ```php
-use Tpetry\MysqlExplain\Facades\MysqlExplain;
+use Tpetry\LaravelMysqlExplain\Facades\MysqlExplain;
 
 // $url will be e.g. https://mysqlexplain.com/explain/01j2gctgtheyva7a7mhpv8azje
 $url = MysqlExplain::submitQuery(

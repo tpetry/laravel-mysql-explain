@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tpetry\MysqlExplain\Mixins;
+namespace Tpetry\LaravelMysqlExplain\Mixins;
 
 use Closure;
-use Tpetry\MysqlExplain\Facades\MysqlExplain;
+use Tpetry\LaravelMysqlExplain\Facades\MysqlExplain;
 
 /**
  * @internal
@@ -17,8 +17,7 @@ class BuilderMixin
         /** @return never-returns */
         return function () {
             /** @var \Illuminate\Contracts\Database\Query\Builder $this */
-            $url = MysqlExplain::submitBuilder($this);
-            dd($url);
+            dd(MysqlExplain::submitBuilder($this));
         };
     }
 
@@ -27,8 +26,7 @@ class BuilderMixin
         /** @return never-returns */
         return function () {
             /** @var \Illuminate\Contracts\Database\Query\Builder $this */
-            $url = MysqlExplain::submitBuilder($this);
-            dd($url);
+            dd(MysqlExplain::submitBuilder($this));
         };
     }
 
@@ -36,8 +34,7 @@ class BuilderMixin
     {
         return function () {
             /** @var \Illuminate\Contracts\Database\Query\Builder $this */
-            $url = MysqlExplain::submitBuilder($this);
-            dump($url);
+            dump(MysqlExplain::submitBuilder($this));
 
             return $this;
         };
@@ -47,8 +44,7 @@ class BuilderMixin
     {
         return function () {
             /** @var \Illuminate\Contracts\Database\Query\Builder $this */
-            $url = MysqlExplain::submitBuilder($this);
-            dump($url);
+            dump(MysqlExplain::submitBuilder($this));
 
             return $this;
         };
@@ -58,9 +54,7 @@ class BuilderMixin
     {
         return function (): string {
             /** @var \Illuminate\Contracts\Database\Query\Builder $this */
-            $url = MysqlExplain::submitBuilder($this);
-
-            return $url;
+            return MysqlExplain::submitBuilder($this);
         };
     }
 
@@ -68,9 +62,7 @@ class BuilderMixin
     {
         return function (): string {
             /** @var \Illuminate\Contracts\Database\Query\Builder $this */
-            $url = MysqlExplain::submitBuilder($this);
-
-            return $url;
+            return MysqlExplain::submitBuilder($this);
         };
     }
 }

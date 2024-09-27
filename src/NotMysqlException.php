@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tpetry\MysqlExplain\Exceptions;
+namespace Tpetry\LaravelMysqlExplain;
 
-use Tpetry\MysqlExplain\MySqlExplainException;
+use Exception;
 
-class NotMysqlException extends MySqlExplainException
+class NotMysqlException extends Exception
 {
     public static function create(?string $driverName): self
     {
