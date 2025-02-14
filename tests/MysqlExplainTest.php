@@ -19,7 +19,7 @@ use Tpetry\PhpMysqlExplain\Metrics\Metrics;
 
 class MysqlExplainTest extends TestCase
 {
-    public function testSubmitBuilderForwardsCall(): void
+    public function test_submit_builder_forwards_call(): void
     {
         $builder = DB::connection()->table('test')->where('col', 1);
         $mysqlExplain = Mockery::mock(MysqlExplain::class.'[submitQuery]')
@@ -34,7 +34,7 @@ class MysqlExplainTest extends TestCase
         $this->assertEquals('https://dummy-url-LTGq4mDWlo.local/PTzphBiWQW', $url);
     }
 
-    public function testSubmitQueryFailsWhenMariadbFeatureIsDetected(): void
+    public function test_submit_query_fails_when_mariadb_feature_is_detected(): void
     {
         $this->expectException(NotMysqlException::class);
         $this->expectExceptionMessage('Only queries on mysql databases can be analyzed. mariadb query given.');
@@ -49,7 +49,7 @@ class MysqlExplainTest extends TestCase
         (new MysqlExplain)->submitQuery($connection, 'SELECT 1');
     }
 
-    public function testSubmitQueryFailsWhenPassedNonMysqlConnection(): void
+    public function test_submit_query_fails_when_passed_non_mysql_connection(): void
     {
         $this->expectException(NotMysqlException::class);
         $this->expectExceptionMessage('Only queries on mysql databases can be analyzed. mariadb query given.');
@@ -62,7 +62,7 @@ class MysqlExplainTest extends TestCase
         (new MysqlExplain)->submitQuery($connection, 'SELECT 1');
     }
 
-    public function testSubmitQueryFailsWhenPassedNonPdoConnection(): void
+    public function test_submit_query_fails_when_passed_non_pdo_connection(): void
     {
         $this->expectException(NotMysqlException::class);
         $this->expectExceptionMessage('Only queries on mysql databases can be analyzed. unknown query given.');
@@ -70,7 +70,7 @@ class MysqlExplainTest extends TestCase
         (new MysqlExplain)->submitQuery(Mockery::mock(ConnectionInterface::class), 'SELECT 1');
     }
 
-    public function testSubmitQueryReturnsUrl(): void
+    public function test_submit_query_returns_url(): void
     {
         $connection = DB::connection('mysql');
         $sql = 'SELECT * FROM customer WHERE last_name = ?';

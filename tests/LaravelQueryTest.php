@@ -11,7 +11,7 @@ use Tpetry\LaravelMysqlExplain\MysqlExplain;
 
 class LaravelQueryTest extends TestCase
 {
-    public function testConstructorValues(): void
+    public function test_constructor_values(): void
     {
         $date = new DateTimeImmutable('@1199699021');
         $query = new LaravelQuery(
@@ -30,7 +30,7 @@ class LaravelQueryTest extends TestCase
         $this->assertEquals([1, 1, 0, $date->format(DB::connection('mysql')->getQueryGrammar()->getDateFormat())], $query->getParameters());
     }
 
-    public function testExecuteWithoutParameters(): void
+    public function test_execute_without_parameters(): void
     {
         $query = new LaravelQuery(DB::connection(), "SELECT 'unused'", ['not-used']);
 
@@ -39,7 +39,7 @@ class LaravelQueryTest extends TestCase
         $this->assertEquals([['val' => 1], ['val' => 2]], $rows);
     }
 
-    public function testExecuteWitParameters(): void
+    public function test_execute_wit_parameters(): void
     {
         $query = new LaravelQuery(DB::connection(), "SELECT 'unused'", [1, 2]);
 

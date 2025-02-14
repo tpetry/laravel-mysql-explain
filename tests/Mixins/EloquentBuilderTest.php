@@ -10,27 +10,27 @@ use Tpetry\LaravelMysqlExplain\Tests\TestCase;
 
 class EloquentBuilderTest extends TestCase
 {
-    public function testDdExplainForHumans(): void
+    public function test_dd_explain_for_humans(): void
     {
         $this->markTestSkipped('how to test dump() and not exit PHPUnit on exit() call?');
     }
 
-    public function testDdVisualExplain(): void
+    public function test_dd_visual_explain(): void
     {
         $this->markTestSkipped('how to test dump() and not exit PHPUnit on exit() call?');
     }
 
-    public function testDumpExplainForHumans(): void
+    public function test_dump_explain_for_humans(): void
     {
         $this->markTestSkipped('how to test dump()?');
     }
 
-    public function testDumpVisualExplain(): void
+    public function test_dump_visual_explain(): void
     {
         $this->markTestSkipped('how to test dump()?');
     }
 
-    public function testExplainForHumans(): void
+    public function test_explain_for_humans(): void
     {
         $model = new class extends Model {};
         $builder = $model->newQuery();
@@ -45,7 +45,7 @@ class EloquentBuilderTest extends TestCase
         $this->assertEquals('https://dummy-url-A5mhRHJXvC.local/I2aifhDBCO', $url);
     }
 
-    public function testVisualExplain(): void
+    public function test_visual_explain(): void
     {
         $model = new class extends Model {};
         $builder = $model->newQuery();

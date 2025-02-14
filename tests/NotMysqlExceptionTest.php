@@ -8,7 +8,7 @@ use Tpetry\LaravelMysqlExplain\NotMysqlException;
 
 class NotMysqlExceptionTest extends TestCase
 {
-    public function testCreatesExceptionWithDrivername(): void
+    public function test_creates_exception_with_drivername(): void
     {
         $exception = NotMysqlException::create('mysql');
 
@@ -16,7 +16,7 @@ class NotMysqlExceptionTest extends TestCase
         $this->assertEquals('Only queries on mysql databases can be analyzed. mysql query given.', $exception->getMessage());
     }
 
-    public function testCreatesExceptionWithMissingDrivername(): void
+    public function test_creates_exception_with_missing_drivername(): void
     {
         $exception = NotMysqlException::create(null);
 
