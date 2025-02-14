@@ -29,6 +29,11 @@ jobs:
             php: 8.2
           - laravel: 8.*
             php: 8.3
+          # Laravel 12.x only supports PHP ^8.2
+          - laravel: 12.*
+            php: 8.0
+          - laravel: 12.*
+            php: 8.1
           # Laravel 11.x only supports PHP ^8.2
           - laravel: 11.*
             php: 8.0
