@@ -26,6 +26,7 @@ class LaravelQuery implements QueryInterface
         };
 
         // Laravel creates array<object> instead of array<arrays> as requested by interface.
+        /** @var array<int, array<string, mixed>> $rows */
         $rows = array_map(fn ($row) => (array) $row, $rows);
 
         return $rows;
@@ -34,7 +35,10 @@ class LaravelQuery implements QueryInterface
     public function getParameters(): array
     {
         // Transform special values like DateTimeInterface and bool to their string value.
-        return $this->connection->prepareBindings($this->parameters);
+        /** @var array<float|int|string> $parameters */
+        $parameters = $this->connection->prepareBindings($this->parameters);
+
+        return $parameters;
     }
 
     public function getSql(): string

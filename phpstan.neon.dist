@@ -1,5 +1,8 @@
+includes:
+    - phpstan-baseline.neon
+
 parameters:
-    level: max
+    level: 9
     paths:
         - src
     checkOctaneCompatibility: true

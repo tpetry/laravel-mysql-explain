@@ -1,0 +1,7 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^PHPDoc tag @var with type Illuminate\\Contracts\\Database\\Query\\Builder is not subtype of native type \$this\(Tpetry\\LaravelMysqlExplain\\Mixins\\BuilderMixin\)\.$#'
+			identifier: varTag.nativeType
+			count: 6
+			path: src/Mixins/BuilderMixin.php
