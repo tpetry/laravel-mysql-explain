@@ -7,6 +7,7 @@ namespace Tpetry\LaravelMysqlExplain;
 use Illuminate\Container\Container;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Database\QueryException;
 use Tpetry\PhpMysqlExplain\Api\Client;
 use Tpetry\PhpMysqlExplain\Metrics\Collector;
@@ -16,7 +17,7 @@ class MysqlExplain
     public static string $VERSION = '1.0.0';
 
     /**
-     * @param  \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Contracts\Database\Query\Builder  $builder
+     * @param  Builder|\Illuminate\Database\Eloquent\Builder|\Illuminate\Contracts\Database\Query\Builder  $builder
      */
     public function submitBuilder($builder): string
     {

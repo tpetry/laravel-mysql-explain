@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tpetry\LaravelMysqlExplain\Mixins;
 
 use Closure;
+use Illuminate\Contracts\Database\Query\Builder;
 use Tpetry\LaravelMysqlExplain\Facades\MysqlExplain;
 
 /**
@@ -16,7 +17,7 @@ class BuilderMixin
     {
         /** @return never-returns */
         return function () {
-            /** @var \Illuminate\Contracts\Database\Query\Builder $this */
+            /** @var Builder $this */
             dd(MysqlExplain::submitBuilder($this));
         };
     }
@@ -25,7 +26,7 @@ class BuilderMixin
     {
         /** @return never-returns */
         return function () {
-            /** @var \Illuminate\Contracts\Database\Query\Builder $this */
+            /** @var Builder $this */
             dd(MysqlExplain::submitBuilder($this));
         };
     }
@@ -33,7 +34,7 @@ class BuilderMixin
     public function dumpExplainForHumans(): Closure
     {
         return function () {
-            /** @var \Illuminate\Contracts\Database\Query\Builder $this */
+            /** @var Builder $this */
             dump(MysqlExplain::submitBuilder($this));
 
             return $this;
@@ -43,7 +44,7 @@ class BuilderMixin
     public function dumpVisualExplain(): Closure
     {
         return function () {
-            /** @var \Illuminate\Contracts\Database\Query\Builder $this */
+            /** @var Builder $this */
             dump(MysqlExplain::submitBuilder($this));
 
             return $this;
@@ -53,7 +54,7 @@ class BuilderMixin
     public function explainForHumans(): Closure
     {
         return function (): string {
-            /** @var \Illuminate\Contracts\Database\Query\Builder $this */
+            /** @var Builder $this */
             return MysqlExplain::submitBuilder($this);
         };
     }
@@ -61,7 +62,7 @@ class BuilderMixin
     public function visualExplain(): Closure
     {
         return function (): string {
-            /** @var \Illuminate\Contracts\Database\Query\Builder $this */
+            /** @var Builder $this */
             return MysqlExplain::submitBuilder($this);
         };
     }
