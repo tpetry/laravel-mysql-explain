@@ -21,6 +21,14 @@ jobs:
         php: [8.0, 8.1, 8.2, 8.3]
         laravel: [6.*, 7.*, 8.*, 9.*, 10.*, 11.*, 12.*]
         stability: [prefer-lowest, prefer-stable]
+        include:
+          # Reconstructing the test matrix for new PHP- and Laravel versions is hard, so I hardcoded the matrix result for Laravel 13.
+          - php: 8.5
+            laravel: 13.*
+            stability: prefer-lowest
+          - php: 8.5
+            laravel: 13.*
+            stability: prefer-stable
         exclude:
           # These combinations should work, but there is a problem when testing...
           - laravel: 8.*
